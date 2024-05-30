@@ -1,4 +1,4 @@
-The provided script automates the installation and configuration of Prometheus, Node Exporter, Redis Exporter, and Grafana on a CentOS system. It includes handling for both CentOS 6 and CentOS 7, ensuring services are set up correctly for each version. Below is an explanation of each part of the script.
+The provided script (centos_prometheus_setup.sh) automates the installation and configuration of Prometheus, Node Exporter, Redis Exporter, and Grafana on a CentOS system. It includes handling for both CentOS 6 and CentOS 7, ensuring services are set up correctly for each version. Below is an explanation of each part of the script.
 
 ### Key Parts of the Script:
 
