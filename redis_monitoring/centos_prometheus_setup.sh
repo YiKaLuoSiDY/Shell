@@ -22,6 +22,7 @@ if_failure() {
     fi
 }
 
+# centos6系统启动配置下载 函数
 centos6_start_service() {
     # 下载 prometheus 启动配置
     wget -P /etc/init.d/ https://raw.githubusercontent.com/YiKaLuoSiDY/cong/main/prometheus
@@ -37,6 +38,7 @@ centos6_start_service() {
     chmod +x /etc/init.d/{prometheus,node_exporter}
 }
 
+# centos7系统启动配置生成 函数
 centos7_start_service() {
     # prometheus 启动配置
     cat > /usr/lib/systemd/system/prometheus.service << EOF
@@ -62,7 +64,7 @@ EOF
 
 
 
-## 检查 ##
+# 检查
 if [ -d "$INSTALL_PATH" ]; then
     echo "Installation directory "$INSTALL_PATH" exists, need to delete directory manually!"
     exit 1
@@ -73,9 +75,8 @@ else
         }
 fi
 
-
-
-## 准备工作 ##
+# 准备工作
+# 下载安装包
 cd /root
 wget https://github.com/prometheus/prometheus/releases/download/v2.45.2/prometheus-2.45.2.linux-amd64.tar.gz
 if_failure "prometheus-2.45.2.linux-amd64.tar.gz 下载失败"
@@ -85,10 +86,10 @@ wget https://github.com/oliver006/redis_exporter/releases/download/v1.47.0/redis
 if_failure "redis_exporter-v1.47.0.linux-amd64.tar.gz 下载失败"
 wget https://dl.grafana.com/enterprise/release/grafana-enterprise-8.5.2-1.x86_64.rpm
 if_failure "grafana-enterprise-8.5.2-1.x86_64.rpm 下载失败"
+# 创建安装目录
 mkdir $INSTALL_PATH
 
-
-## 脚本主体 ##
+# 脚本主体
 # 安装 prometheus
 tar zxf prometheus-2.45.2.linux-amd64.tar.gz -C $INSTALL_PATH
 if_failure "prometheus 安装失败"
@@ -118,7 +119,6 @@ chown root.root -R $INSTALL_PATH
 yum -y install grafana-enterprise-8.5.2-1.x86_64.rpm
 if_failure "grafana 安装失败"
 
-
 # 添加开机启动
 REDHAT_RELEASE=$(cat /etc/redhat-release)
 # 使用正则表达式匹配版本号
@@ -142,8 +142,7 @@ else
     echo "This is not CentOS 6 or 7. It might be another version or OS."
 fi
 
-
-
+# 清理
 clear() {
     cd /root
     rm -f ./prometheus-2.45.2.linux-amd64.tar.gz
