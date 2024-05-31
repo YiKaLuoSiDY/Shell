@@ -22,7 +22,6 @@ if_failure() {
     fi
 }
 
-
 centos6_start_service() {
     # 下载 prometheus 启动配置
     wget -P /etc/init.d/ https://raw.githubusercontent.com/YiKaLuoSiDY/cong/main/prometheus
@@ -30,7 +29,7 @@ centos6_start_service() {
     sed -i "s/\$PROMETHEUS_PATH/$PROMETHEUS_PATH/g" /etc/init.d/prometheus
 
     # 下载 node_exporter 启动配置
-    wget -P /etc/init.d/ https://raw.githubusercontent.com/YiKaLuoSiDY/cong/main/node_exporter || exit 1
+    wget -P /etc/init.d/ https://raw.githubusercontent.com/YiKaLuoSiDY/cong/main/node_exporter
     if_failure "node_exporter 启动配置下载失败"
     sed -i "s/\$NODE_EXPORTER_PATH/$NODE_EXPORTER_PATH/g" /etc/init.d/node_exporter
 
@@ -50,7 +49,6 @@ ExecStart=$PROMETHEUS_PATH/bin/prometheus \\
   --web.listen-address=:9099
 [Install]
 EOF
-
     # node_exporter 启动配置
     cat > /usr/lib/systemd/system/node_exporter.service << EOF
 [Unit]
