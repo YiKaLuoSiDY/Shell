@@ -148,6 +148,7 @@ cd $SRC_PATH/php-8.2.3
     --with-pear \
     --enable-sockets \
     --with-mhash \
+    --with-ldap \
     --with-ldap-sasl \
     --with-xsl \
     --with-zlib \
