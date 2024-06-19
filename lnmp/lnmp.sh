@@ -127,8 +127,9 @@ err_dis "oniguruma安装失败！"
 cd /root
 echo "export PKG_CONFIG_PATH=${LIBZIP_PATH}/lib/pkgconfig:${ONIGURUMA_PATH}/lib/pkgconfig" >> /etc/profile
 source /etc/profile
-yum install sqlite-devel bzip2-devel libcurl-devel libicu-devel -y
+yum install sqlite-devel bzip2-devel libcurl-devel libicu-devel openldap-devel -y
 err_dis "php环境安装失败！"
+cp -frp /usr/lib64/libldap* /usr/lib/
 tar zxf php-8.2.3.tar.gz -C $SRC_PATH
 err_dis "php-8.2.3.tar.gz解压失败！"
 cd $SRC_PATH/php-8.2.3
