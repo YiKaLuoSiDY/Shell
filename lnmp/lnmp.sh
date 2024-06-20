@@ -219,7 +219,7 @@ $NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf
 sleep 1
 netstat -lntpu | grep "nginx" | grep -w tcp
 
-$PHP_PATH/sbin/php-fpm -c $PHP_PAHT/etc/php-fpm.conf
+$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf
 sleep 1
 netstat -lntpu | grep "php" | grep -w tcp
 
