@@ -133,7 +133,7 @@ cp -frp /usr/lib64/libldap* /usr/lib/
 tar zxf php-8.2.3.tar.gz -C $SRC_PATH
 err_dis "php-8.2.3.tar.gz解压失败！"
 cd $SRC_PATH/php-8.2.3
-LIBS="-llber" ./configure \
+./configure \
     --with-curl \
     --with-freetype \
     --enable-gd \
