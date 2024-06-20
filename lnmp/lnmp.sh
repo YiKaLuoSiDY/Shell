@@ -147,7 +147,6 @@ LIBS="-llber" ./configure \
     --with-pdo-mysql \
     --with-pdo-sqlite \
     --with-pear \
-    --enable-sockets \
     --with-mhash \
     --with-ldap \
     --with-ldap-sasl \
