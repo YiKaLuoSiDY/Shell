@@ -16,6 +16,22 @@ file_exist() {
     [ -f "$1" ]
 }
 
+generate_service() {
+    local service_name="$1"
+    local exec_start="$2"
+
+    cat > "/etc/systemd/system/${service_name}.service" << EOF
+[Unit]
+Description=${service_name} Service
+After=network.target
+
+[Service]
+ExecStart=${exec_start}
+
+[Install]
+WantedBy=multi-user.target
+EOF
+}
 
 
 [ ! -d "$INSTALL_PATH" ]
@@ -214,18 +230,16 @@ err_dis "数据库初始化失败,查看错误信息！"
 MYSQL_PASSWORD=$(grep -w 'root@localhost' $MYSQL_PATH/logs/mysql.err | awk '{print $NF}')
 
 # start
-echo -e "\n\033[32m// 启动 nignx、php、mysql\033[0m"
-$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf
-sleep 1
-netstat -lntpu | grep "nginx" | grep -w tcp
-
-$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf
-sleep 1
-netstat -lntpu | grep "php" | grep -w tcp
-
-$MYSQL_PATH/bin/mysqld --defaults-file=${MYSQL_PATH}/etc/my.cnf &
-sleep 1
-netstat -lntpu | grep "mysql" | grep -w tcp
+# 生成 nginx.service
+generate_service "nginx" "$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf"
+# 生成 php-fpm.service
+generate_service "php-fpm" "$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf"
+# 生成 mysqld.service
+generate_service "mysqld" "$MYSQL_PATH/bin/mysqld --defaults-file=${MYSQL_PATH}/etc/my.cnf"
+systemctl daemon-reload
+systemctl start nginx.service
+systemctl start php-fpm.service
+systemctl start mysqld.service
 
 # echo
 echo -e "\033[32m// 需要修改mysql临时密码\033[0m
@@ -234,8 +248,6 @@ echo -e "\033[32m// 需要修改mysql临时密码\033[0m
  | $MYSQL_PATH/bin/mysql -u root -p
  | ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
 └───────────────────────────────────────────────────────────
-\033[32m// 如出现以下报错，重新打开终端窗口登录\033[0m
-Can't connect to local MySQL server through socket
 "
 
 # clear
