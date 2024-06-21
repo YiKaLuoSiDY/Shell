@@ -239,7 +239,7 @@ MYSQL_PASSWORD=$(grep -w 'root@localhost' $MYSQL_PATH/logs/mysql.err | awk '{pri
 NGINX_START="$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf"
 PHP_START="$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf"
 MYSQL_START="$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf &"
-echo "#!/bin/bash" | tee $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
+echo "#!/bin/bash" | tee $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh &>/dev/null
 chmod +x $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
 echo "$NGINX_START" >> $NGINX_PATH/start.sh
 echo "$PHP_START" >> $PHP_PATH/start.sh
