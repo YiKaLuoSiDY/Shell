@@ -9,6 +9,17 @@ ONIGURUMA_PATH="$INSTALL_PATH/oniguruma-6.9.4"
 PHP_PATH="$INSTALL_PATH/php-8.2.3"
 MYSQL_PATH="$INSTALL_PATH/mysql-8.1.0"
 
+FILE_LIST=(
+"1061070 nginx-1.20.0.tar.gz"
+"1523449 libzip-1.3.2.tar.gz"
+"582597 oniguruma-6.9.4.tar.gz"
+"20128968 php-8.2.3.tar.gz"
+"448377800 mysql-8.1.0-linux-glibc2.17-x86_64.tar.xz"
+"1487 nginx.conf"
+"468 vhosts_80.conf"
+"632 www.conf"
+"276 my.cnf")
+
 err_dis() {
     [ $? = 0 ] || { echo -e "\033[31m$1\033[0m" ; exit 1; }
 }
@@ -56,6 +67,17 @@ do
     FILE=$(echo $URL | awk -F '[/]' '{print $NF}')
     file_exist "$FILE" || wget $URL
     err_dis "${FILE}下载失败！"
+done
+
+cd /root
+for SIZE_FILE in "${FILE_LIST[@]}" ;do
+    SIZE=$(echo $SIZE_FILE|awk '{print $1}')
+    FILE=$(echo $SIZE_FILE|awk '{print $2}')
+    FILE_SIZE=$(stat -c%s $FILE)
+    if [ ! "$FILE_SIZE" -eq "$SIZE" ] ;then
+        echo "$FILE 你，该罚"
+        exit 1
+    fi
 done
 mkdir -p $SRC_PATH
 
