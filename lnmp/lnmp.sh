@@ -27,23 +27,6 @@ file_exist() {
     [ -f "$1" ]
 }
 
-generate_service() {
-    local service_name="$1"
-    local exec_start="$2"
-
-    cat > "/etc/systemd/system/${service_name}.service" << EOF
-[Unit]
-Description=${service_name} Service
-After=network.target
-
-[Service]
-ExecStart=${exec_start}
-
-[Install]
-WantedBy=multi-user.target
-EOF
-}
-
 
 [ ! -d "$INSTALL_PATH" ]
 err_dis "目录${INSTALL_PATH}已存在,需要手动删除!"
@@ -253,16 +236,15 @@ err_dis "数据库初始化失败,查看错误信息！"
 MYSQL_PASSWORD=$(grep -w 'root@localhost' $MYSQL_PATH/logs/mysql.err | awk '{print $NF}')
 
 # start
-# 生成 nginx.service
-generate_service "nginx" "$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf"
-# 生成 php-fpm.service
-generate_service "php-fpm" "$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf"
-# 生成 mysqld.service
-generate_service "mysqld" "$MYSQL_PATH/bin/mysqld --defaults-file=${MYSQL_PATH}/etc/my.cnf"
-systemctl daemon-reload
-systemctl start nginx.service
-systemctl start php-fpm.service
-systemctl start mysqld.service
+NGINX_START="$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf"
+PHP_START="$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf"
+MYSQL_START="$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf"
+echo "#!/bin/bash" | tee $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
+chmod +x $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
+echo "$NGINX_START" >> $NGINX_PATH/start.sh
+echo "$PHP_START" >> $PHP_PATH/start.sh
+echo "$MYSQL_START" >> $MYSQL_PATH/start.sh
+$($NGINX_START);$($PHP_START);$($MYSQL_START);
 
 # echo
 echo -e "\033[32m// 需要修改mysql临时密码\033[0m
