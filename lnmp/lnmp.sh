@@ -244,6 +244,7 @@ echo "$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf" >> $NGINX_PATH/star
 echo "$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf" >> $PHP_PATH/start.sh
 echo "$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf &" >> $MYSQL_PATH/start.sh
 chmod +x $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
+sleep 3
 netstat -lntpu | grep -E 'nginx|php-fpm|mysqld'
 
 # echo
