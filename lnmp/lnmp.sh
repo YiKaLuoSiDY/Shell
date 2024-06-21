@@ -238,16 +238,13 @@ MYSQL_PASSWORD=$(grep -w 'root@localhost' $MYSQL_PATH/logs/mysql.err | awk '{pri
 # start
 NGINX_START="$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf"
 PHP_START="$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf"
-MYSQL_START="$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf"
+MYSQL_START="$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf &"
 echo "#!/bin/bash" | tee $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
 chmod +x $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
 echo "$NGINX_START" >> $NGINX_PATH/start.sh
 echo "$PHP_START" >> $PHP_PATH/start.sh
 echo "$MYSQL_START" >> $MYSQL_PATH/start.sh
-
-$NGINX_START
-$PHP_START
-$MYSQL_START
+$NGINX_START;$PHP_START;$MYSQL_START
 
 # echo
 echo -e "\033[32m// 需要修改mysql临时密码\033[0m
