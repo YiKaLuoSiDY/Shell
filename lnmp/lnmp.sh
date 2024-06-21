@@ -52,7 +52,6 @@ do
     err_dis "${FILE}下载失败！"
 done
 
-cd /root
 for SIZE_FILE in "${FILE_LIST[@]}" ;do
     SIZE=$(echo $SIZE_FILE|awk '{print $1}')
     FILE=$(echo $SIZE_FILE|awk '{print $2}')
