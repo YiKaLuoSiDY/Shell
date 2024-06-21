@@ -236,15 +236,14 @@ err_dis "数据库初始化失败,查看错误信息！"
 MYSQL_PASSWORD=$(grep -w 'root@localhost' $MYSQL_PATH/logs/mysql.err | awk '{print $NF}')
 
 # start
-NGINX_START="$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf"
-PHP_START="$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf"
-MYSQL_START="$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf &"
+$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf
+$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf
+$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf &
 echo "#!/bin/bash" | tee $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh &>/dev/null
+echo "$NGINX_PATH/sbin/nginx -c $NGINX_PATH/conf/nginx.conf" >> $NGINX_PATH/start.sh
+echo "$PHP_PATH/sbin/php-fpm -c $PHP_PATH/etc/php-fpm.conf" >> $PHP_PATH/start.sh
+echo "$MYSQL_PATH/bin/mysqld --defaults-file=$MYSQL_PATH/etc/my.cnf &" >> $MYSQL_PATH/start.sh
 chmod +x $NGINX_PATH/start.sh $PHP_PATH/start.sh $MYSQL_PATH/start.sh
-echo "$NGINX_START" >> $NGINX_PATH/start.sh
-echo "$PHP_START" >> $PHP_PATH/start.sh
-echo "$MYSQL_START" >> $MYSQL_PATH/start.sh
-$NGINX_START;$PHP_START;$MYSQL_START;
 netstat -lntpu | grep -E 'nginx|php-fpm|mysqld'
 
 # echo
