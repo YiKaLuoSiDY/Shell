@@ -245,6 +245,7 @@ echo "$NGINX_START" >> $NGINX_PATH/start.sh
 echo "$PHP_START" >> $PHP_PATH/start.sh
 echo "$MYSQL_START" >> $MYSQL_PATH/start.sh
 $NGINX_START;$PHP_START;$MYSQL_START;
+netstat -lntpu | grep -E 'nginx|php-fpm|mysqld'
 
 # echo
 echo -e "\033[32m// 需要修改mysql临时密码\033[0m
