@@ -102,6 +102,7 @@ err_dis "nginx编译失败！"
 make install
 err_dis "nginx安装失败！"
 mv $NGINX_PATH/html $NGINX_PATH/www
+rm -f $NGINX_PATH/www/*
 mkdir -p $NGINX_PATH/conf/conf.d/vhosts
 echo "export PATH=\$PATH:$NGINX_PATH/sbin" >> /etc/profile
 source /etc/profile
