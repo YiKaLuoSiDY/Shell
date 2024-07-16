@@ -7,17 +7,14 @@ REDIS_EXPORTER_PATH="$INSTALL_PATH/redis_exporter-1.47.0"
 NODE_EXPORTER_PATH="$INSTALL_PATH/node_exporter-1.7.0"
 
 failure() {
-    local rc=$?
     echo -en "\\033[60G[\\033[1;31mFAILED\\033[0;39m]\r"
-    [ -x /bin/plymouth ] && /bin/plymouth --details
-    return $rc
 }
 
 # 判断命令是否执行失败 函数
 if_failure() {
     if [ $? -ne 0 ]; then
-        echo
-        failure
+        echo -en "$1"
+        failure ; echo
         exit 1
     fi
 }
